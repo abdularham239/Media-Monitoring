@@ -1,0 +1,6 @@
+{
+  "name": "TeleMonitor Broadcast Pro",
+  "description": "Professional TV Channel Monitoring, Real-time Ads & Program Punching, Automatic Clip Generation, Master Libraries & Broadcast Analytics Platform.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  # TV Monitoring System Node Backend & FFmpeg Ingestion Engine
+  telemonitor-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: telemonitor_production_app
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATABASE_URL=postgres://telemonitor:securepassword@postgres:5432/telemonitor_db
+      - REDIS_URL=redis://redis:6379
+      - FFMPEG_PATH=/usr/bin/ffmpeg
+      - STORAGE_PATH=/storage
+    volumes:
+      - telemonitor_storage:/storage
+    depends_on:
+      - postgres
+      - redis
+
+  # PostgreSQL Relational Database Engine
+  postgres:
+    image: postgres:16-alpine
+    container_name: telemonitor_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: telemonitor
+      POSTGRES_PASSWORD: securepassword
+      POSTGRES_DB: telemonitor_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  # Redis Background Worker & Queue System
+  redis:
+    image: redis:7-alpine
+    container_name: telemonitor_redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+volumes:
+  telemonitor_storage:
+  pgdata:
